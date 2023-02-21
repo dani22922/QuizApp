@@ -50,6 +50,7 @@ let questions = [
 ];
 
 let currentQuestion = 0;
+let rightQuestions = 0;
 
 function init() {
     document.getElementById('all-qs').innerHTML = questions.length;
@@ -59,25 +60,71 @@ function init() {
 }
 
 function showQuestion() {
-    let question = questions[currentQuestion];
 
-    document.getElementById('question-text').innerHTML = question['question'];
-    document.getElementById('answer_1').innerHTML = question['answer_1'];
-    document.getElementById('answer_2').innerHTML = question['answer_2'];
-    document.getElementById('answer_3').innerHTML = question['answer_3'];
-    document.getElementById('answer_4').innerHTML = question['answer_4'];
+    if (currentQuestion >= questions.length) {
+        document.getElementById('finish-body').style = ``;
+        document.getElementById('q-body').style = `display:none`;
+
+        document.getElementById('q-amount').innerHTML = questions.length;
+        document.getElementById('q-right').innerHTML = rightQuestions;
+        document.getElementById('q-pic').src = "img/pexels-nataliya-vaitkevich-6120398.jpg";
+    } else { // Show Question
+
+        let percent = (currentQuestion + 1) / questions.length;
+        percent = Math.round(percent * 100);
+        document.getElementById('progress-bar').innerHTML = `${percent}%`;
+        document.getElementById('progress-bar').style = `width:${percent}%`;
+
+        let question = questions[currentQuestion];
+
+        document.getElementById('q-number').innerHTML = currentQuestion + 1;
+        document.getElementById('question-text').innerHTML = question['question'];
+        document.getElementById('answer_1').innerHTML = question['answer_1'];
+        document.getElementById('answer_2').innerHTML = question['answer_2'];
+        document.getElementById('answer_3').innerHTML = question['answer_3'];
+        document.getElementById('answer_4').innerHTML = question['answer_4'];
+    }
 }
 
 function answer(selection) { // selection ist answer_1,2,3,4 jenachdem welche Antwort angeklickt wird.
     let question = questions[currentQuestion]; // Die Variable question ist die 0. Position aus unserem JSON ARRAY questions
-    console.log('Selected answer is ', selection)
     let selectedQuestionNumber = selection.slice(-1); //mit slice(-1) entfernen wir 
-    console.log('selectedQuestionNumber is', selectedQuestionNumber);
-    console.log('current question is ', question['right_answer']);
+    let idOfRightAnswer = `answer_${question['right_answer']}`;
 
     if (selectedQuestionNumber == question['right_answer']) { //wenn die richtige antwort angeklickt wird kommt Richtige Antwort
-        console.log('Richtige Antwort!');
+        document.getElementById(selection).parentNode.classList.add('bg-success');
+        rightQuestions++;
     } else {                                                //  ansonsten die Meldung Falsche Antwort!
-        console.log('Falsche Antwort!');
+        document.getElementById(selection).parentNode.classList.add('bg-danger');
+        document.getElementById(idOfRightAnswer).parentNode.classList.add('bg-success');
     }
+    document.getElementById('next-question').disabled = false;
+}
+
+function nextQuestion() {
+    currentQuestion++; // z.B. von 0 auf 1 erhöhen
+    resetAnswer();
+    showQuestion();
+    document.getElementById('next-question').disabled = true;
+
+}
+
+function resetAnswer() {
+    document.getElementById('answer_1').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_1').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_2').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_2').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_3').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_3').parentNode.classList.remove('bg-success');
+    document.getElementById('answer_4').parentNode.classList.remove('bg-danger');
+    document.getElementById('answer_4').parentNode.classList.remove('bg-success');
+}
+
+function restartGame() {
+    document.getElementById('q-pic').src = "img/questionmark.jpg";
+    document.getElementById('finish-body').style = `display:none`;
+    document.getElementById('q-body').style = ``;
+    rightQuestions = 0;
+    currentQuestion = 0;
+    init();
 }
