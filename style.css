@@ -1,0 +1,27 @@
+body {
+    background-image: linear-gradient(to bottom, #051937, #004d7a, #008793, #00bf72, #a8eb12);
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.question-footer {
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(0, 0, 0, 4);
+    align-items: center;
+    padding-top: 8px;
+}
+
+.quiz-card {
+    width: 30rem;
+}
+
+.quiz-answer:hover {
+    cursor: pointer;
+    background-color: azure;
+}
