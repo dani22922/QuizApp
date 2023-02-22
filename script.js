@@ -51,6 +51,8 @@ let questions = [
 
 let currentQuestion = 0;
 let rightQuestions = 0;
+let audioSuccess = new Audio('sounds/correct.mp3');
+let audioWrong = new Audio('sounds/wrong.mp3');
 
 function init() {
     document.getElementById('all-qs').innerHTML = questions.length;
@@ -62,12 +64,7 @@ function init() {
 function showQuestion() {
 
     if (currentQuestion >= questions.length) {
-        document.getElementById('finish-body').style = ``;
-        document.getElementById('q-body').style = `display:none`;
-
-        document.getElementById('q-amount').innerHTML = questions.length;
-        document.getElementById('q-right').innerHTML = rightQuestions;
-        document.getElementById('q-pic').src = "img/pexels-nataliya-vaitkevich-6120398.jpg";
+        showEndScreen();
     } else { // Show Question
 
         let percent = (currentQuestion + 1) / questions.length;
@@ -93,10 +90,12 @@ function answer(selection) { // selection ist answer_1,2,3,4 jenachdem welche An
 
     if (selectedQuestionNumber == question['right_answer']) { //wenn die richtige antwort angeklickt wird kommt Richtige Antwort
         document.getElementById(selection).parentNode.classList.add('bg-success');
+        audioSuccess.play();
         rightQuestions++;
     } else {                                                //  ansonsten die Meldung Falsche Antwort!
         document.getElementById(selection).parentNode.classList.add('bg-danger');
         document.getElementById(idOfRightAnswer).parentNode.classList.add('bg-success');
+        audioWrong.play();
     }
     document.getElementById('next-question').disabled = false;
 }
@@ -127,4 +126,12 @@ function restartGame() {
     rightQuestions = 0;
     currentQuestion = 0;
     init();
+}
+
+function showEndScreen() {
+    document.getElementById('finish-body').style = ``;
+    document.getElementById('q-body').style = `display:none`;
+    document.getElementById('q-amount').innerHTML = questions.length;
+    document.getElementById('q-right').innerHTML = rightQuestions;
+    document.getElementById('q-pic').src = "img/pexels-nataliya-vaitkevich-6120398.jpg";
 }
